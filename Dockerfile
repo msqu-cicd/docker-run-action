@@ -1,6 +1,6 @@
-FROM docker:20.10
+FROM docker:27
 
-RUN apk add bash
+RUN apk add --no-cache bash
 
 COPY entrypoint.sh /entrypoint.sh
 

@@ -1,3 +1,10 @@
+# Foat/docker-run-action Releases
+
+### 4.0.0
+
+- Added [Gitea Actions](https://docs.gitea.com/next/usage/actions/overview) support
+- Versions upgrade
+
 # addnab/docker-run-action Releases
 
 ### 3.0.0

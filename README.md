@@ -1,8 +1,9 @@
 # Docker Run Action
 
+- Suitable for use with [Gitea Actions](https://docs.gitea.com/next/usage/actions/overview)
 - run a specific step in docker.
 - run an image built by a previous step.
-- See https://github.com/addnab/docker-run-action/blob/main/action.yml for all the available inputs.
+- See https://github.com/Foat/docker-run-action/blob/prime/action.yml for all the available inputs.
 
 ## Examples
 
@@ -10,8 +11,8 @@
 
 ```yaml
 - name: Checkout 
-  uses: actions/checkout@v2 # Required to mount the Github Workspace to a volume 
-- uses: addnab/docker-run-action@v3
+  uses: actions/checkout@v4 # Required to mount the Github Workspace to a volume 
+- uses: Foat/docker-run-action@v4
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -25,7 +26,7 @@
 
 #### run a privately-owned image
 ```yaml
-- uses: addnab/docker-run-action@v3
+- uses: Foat/docker-run-action@v4
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -36,11 +37,11 @@
 
 #### run an image built by a previous step
 ```yaml
-- uses: docker/build-push-action@v2
+- uses: docker/build-push-action@v4
   with:
     tags: test-image:latest
     push: false
-- uses: addnab/docker-run-action@v3
+- uses: Foat/docker-run-action@v4
   with:
     image: test-image:latest
     run: echo "hello world"
@@ -50,7 +51,7 @@
 #### use a specific shell (default: sh). 
 *Note: The shell must be installed in the container*
 ```yaml
-- uses: addnab/docker-run-action@v3
+- uses: Foat/docker-run-action@v4
   with:
     image: docker:latest
     shell: bash
