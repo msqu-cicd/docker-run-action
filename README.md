@@ -12,7 +12,7 @@
 ```yaml
 - name: Checkout 
   uses: actions/checkout@v4 # Required to mount the Github Workspace to a volume 
-- uses: Foat/docker-run-action@v4
+- uses: frozen-tapestry/docker-run-action@v5
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -26,7 +26,7 @@
 
 #### run a privately-owned image
 ```yaml
-- uses: Foat/docker-run-action@v4
+- uses: frozen-tapestry/docker-run-action@v5
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -41,7 +41,7 @@
   with:
     tags: test-image:latest
     push: false
-- uses: Foat/docker-run-action@v4
+- uses: frozen-tapestry/docker-run-action@v5
   with:
     image: test-image:latest
     run: echo "hello world"
@@ -51,7 +51,7 @@
 #### use a specific shell (default: sh). 
 *Note: The shell must be installed in the container*
 ```yaml
-- uses: Foat/docker-run-action@v4
+- uses: frozen-tapestry/docker-run-action@v5
   with:
     image: docker:latest
     shell: bash
