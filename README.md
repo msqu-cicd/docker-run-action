@@ -11,7 +11,7 @@
 
 ```yaml
 - name: Checkout 
-  uses: actions/checkout@v4 # Required to mount the Github Workspace to a volume 
+  uses: actions/checkout@v4 # Required to mount the GitHub Workspace to a volume 
 - uses: frozen-tapestry/docker-run-action@v5
   with:
     username: ${{ secrets.DOCKER_USERNAME }}

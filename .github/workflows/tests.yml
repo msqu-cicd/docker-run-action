@@ -59,9 +59,31 @@ jobs:
         id: run-docker
         with:
           image: docker
-          mount-ws: true
+          mount_ws: true
           run: |
             echo "::set-output name=file-contents::`cat ./someFile`"
+      - name: Check if file contents match
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
+            if (fileContents !== 'some text') {
+              core.setFailed(`Unable to mount workspace volume`);
+            }
+  tmp-mount-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create File to be mounted
+        run: echo "some text" > /tmp/someFile
+      - name: Run docker action with mounted workspace
+        uses: ./
+        id: run-docker
+        with:
+          image: docker
+          mount_ws: /tmp
+          run: |
+            echo "::set-output name=file-contents::`cat /tmp/someFile`"
       - name: Check if file contents match
         uses: actions/github-script@v7
         with:

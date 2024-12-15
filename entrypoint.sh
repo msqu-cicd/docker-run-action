@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-set -e
+#!/bin/bash
+set -eo pipefail
+IFS=$'\n\t '
 
 if [ ! -z "$INPUT_USERNAME" ]; then
   echo "$INPUT_PASSWORD" | docker login "$INPUT_REGISTRY" -u "$INPUT_USERNAME" --password-stdin
@@ -14,12 +15,14 @@ if [ "$INPUT_MOUNT_WS" = "true" ]; then
     # If JOB_CONTAINER_NAME exists, use --volumes-from (Gitea support)
     INPUT_OPTIONS="$INPUT_OPTIONS --volumes-from=$JOB_CONTAINER_NAME -w ${GITHUB_WORKSPACE}"
   else
-    # If JOB_CONTAINER_NAME does not exist, mount the workspace
-    if [ -z "$GITHUB_WORKSPACE" ]; then
-      echo "GITHUB_WORKSPACE environment variable not set."
-      exit 1
-    fi
-    INPUT_OPTIONS="$INPUT_OPTIONS -v ${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE} -w ${GITHUB_WORKSPACE}"
+    REPO=${GITHUB_REPOSITORY//$GITHUB_REPOSITORY_OWNER/}
+    WS="$RUNNER_WORKSPACE$REPO"
+    INPUT_OPTIONS="$INPUT_OPTIONS -v $WS:$WS -w $WS"
+  fi
+else
+  if [[ -n "$INPUT_MOUNT_WS" && "$INPUT_MOUNT_WS" != "false" ]]; then
+    WS=$INPUT_MOUNT_WS
+    INPUT_OPTIONS="$INPUT_OPTIONS -v $WS:$WS -w $WS"
   fi
 fi
 
