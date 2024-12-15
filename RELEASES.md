@@ -1,5 +1,11 @@
 # Foat/docker-run-action Releases
 
+### 5.0.0: Workspace Mount Support
+
+- Added `mount_ws` parameter for workspace mounting, compatible with GitHub and Gitea.
+- New tests for verifying automatic and custom directory mounting.
+- Enhanced `entrypoint.sh` for flexible mounts and updated documentation examples.
+
 ### 4.0.0
 
 - Added [Gitea Actions](https://docs.gitea.com/next/usage/actions/overview) support

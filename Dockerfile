@@ -1,4 +1,4 @@
-FROM docker:27
+FROM docker:27.4.0
 
 RUN apk add --no-cache bash
 
