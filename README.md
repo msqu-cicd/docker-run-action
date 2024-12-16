@@ -3,7 +3,7 @@
 - Suitable for use with [Gitea Actions](https://docs.gitea.com/next/usage/actions/overview)
 - run a specific step in docker.
 - run an image built by a previous step.
-- See https://github.com/Foat/docker-run-action/blob/prime/action.yml for all the available inputs.
+- See https://github.com/frozen-tapestry/docker-run-action/blob/prime/action.yml for all the available inputs.
 
 ## Examples
 
