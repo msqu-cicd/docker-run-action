@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - prime
+      - develop
   pull_request:
+    branches:
+      - prime
 
 jobs:
   smoke-test:
