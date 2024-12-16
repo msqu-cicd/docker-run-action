@@ -27,5 +27,12 @@ else
 fi
 
 echo "Docker run options: ${INPUT_OPTIONS}"
+INPUT_RUN="${INPUT_RUN//$'\n'/;}"
+echo "Running: $INPUT_RUN"
 
-docker run --rm -v "/var/run/docker.sock":"/var/run/docker.sock" $INPUT_OPTIONS --entrypoint="$INPUT_SHELL" "$INPUT_IMAGE" -c "${INPUT_RUN//$'\n'/;}"
+docker run --rm \
+  -v "$INPUT_SOCKET:/var/run/docker.sock" \
+  $INPUT_OPTIONS \
+  --entrypoint="$INPUT_SHELL" \
+  "$INPUT_IMAGE" \
+  -c "$INPUT_RUN"
