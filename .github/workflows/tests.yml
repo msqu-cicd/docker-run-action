@@ -19,7 +19,7 @@ jobs:
         with:
           image: docker:27.4.0
           run: |
-            echo "::set-output name=docker-version::`echo $DOCKER_VERSION`"
+            echo "docker-version=$(echo $DOCKER_VERSION)" >> $GITHUB_OUTPUT
       - name: Test the output
         uses: actions/github-script@v7
         with:
@@ -41,7 +41,7 @@ jobs:
           image: docker
           options: -v=${{ github.workspace }}:/work
           run: |
-            echo "::set-output name=file-contents::`cat /work/someFile`"
+            echo "file-contents=$(cat /work/someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
         uses: actions/github-script@v7
         with:
@@ -63,7 +63,7 @@ jobs:
           image: docker
           mount_ws: true
           run: |
-            echo "::set-output name=file-contents::`cat ./someFile`"
+            echo "file-contents=$(cat ./someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
         uses: actions/github-script@v7
         with:
@@ -85,7 +85,7 @@ jobs:
           image: docker
           mount_ws: /tmp
           run: |
-            echo "::set-output name=file-contents::`cat /tmp/someFile`"
+            echo "file-contents=$(cat /tmp/someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
         uses: actions/github-script@v7
         with:

@@ -36,6 +36,12 @@ else
   fi
 fi
 
+if [[ -z "$JOB_CONTAINER_NAME" ]]; then
+  # needed for various Github envs and outputs
+  # for Gitea just use mount_ws: true
+  INPUT_OPTIONS+=("-v=/home/runner/work/_temp:/home/runner/work/_temp")
+fi
+
 echo "Docker run options: ${INPUT_OPTIONS[@]}"
 INPUT_RUN="${INPUT_RUN//$'\n'/;}"
 echo "Running: $INPUT_RUN"
@@ -43,6 +49,7 @@ echo "Running: $INPUT_RUN"
 # podman socket workaround, fixed in newer versions: https://github.com/containers/podman/issues/18889
 IMAGE_ID=$(
   docker create \
+    -e GITHUB_ENV -e GITHUB_OUTPUT -e GITHUB_PATH -e GITHUB_STATE -e GITHUB_STEP_SUMMARY \
     -v "$INPUT_SOCKET:/var/run/docker.sock" \
     ${INPUT_OPTIONS[@]} \
     --entrypoint="$INPUT_SHELL" \
@@ -52,5 +59,6 @@ IMAGE_ID=$(
 docker start $IMAGE_ID
 CODE=$(docker wait $IMAGE_ID)
 docker logs $IMAGE_ID
+echo "Complete code: $CODE"
 docker rm $IMAGE_ID
 exit $CODE

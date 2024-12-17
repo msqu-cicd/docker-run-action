@@ -39,5 +39,5 @@ inputs:
     required: false
     default: '/var/run/docker.sock'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node20'
+  main: 'action.js'
