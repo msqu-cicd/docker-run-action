@@ -40,6 +40,8 @@ IMAGE_ID=$(
     -c "$INPUT_RUN"
 )
 docker start $IMAGE_ID
+echo "Exit code 1: $?"
 CODE=$(docker inspect -f {{.State.ExitCode}} $IMAGE_ID)
+echo "Exit code 2: $CODE"
 docker rm $IMAGE_ID
 exit $CODE
