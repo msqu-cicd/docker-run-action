@@ -1,32 +1,40 @@
 #!/bin/bash
-set -eo pipefail
-IFS=$'\n\t '
+set -euo pipefail
+IFS=$'\n\t'
 
-if [ ! -z "$INPUT_USERNAME" ]; then
+INPUT_USERNAME=${INPUT_USERNAME:-}
+INPUT_DOCKER_NETWORK=${INPUT_DOCKER_NETWORK:-}
+JOB_CONTAINER_NAME=${JOB_CONTAINER_NAME:-}
+INPUT_MOUNT_WS=${INPUT_MOUNT_WS:-}
+
+if [[ ! -z "$INPUT_USERNAME" ]]; then
   echo "$INPUT_PASSWORD" | docker login "$INPUT_REGISTRY" -u "$INPUT_USERNAME" --password-stdin
 fi
 
-if [ ! -z "$INPUT_DOCKER_NETWORK" ]; then
-  INPUT_OPTIONS="$INPUT_OPTIONS --network $INPUT_DOCKER_NETWORK"
+if [[ ! -z "$INPUT_DOCKER_NETWORK" ]]; then
+  INPUT_OPTIONS+=("--network=$INPUT_DOCKER_NETWORK")
 fi
 
-if [ "$INPUT_MOUNT_WS" = "true" ]; then
-  if [ -n "$JOB_CONTAINER_NAME" ]; then
+if [[ "$INPUT_MOUNT_WS" = "true" ]]; then
+  if [[ ! -z "$JOB_CONTAINER_NAME" ]]; then
     # If JOB_CONTAINER_NAME exists, use --volumes-from (Gitea support)
-    INPUT_OPTIONS="$INPUT_OPTIONS --volumes-from=$JOB_CONTAINER_NAME -w ${GITHUB_WORKSPACE}"
+    INPUT_OPTIONS+=("--volumes-from=$JOB_CONTAINER_NAME")
+    INPUT_OPTIONS+=("-w ${GITHUB_WORKSPACE}")
   else
     REPO=${GITHUB_REPOSITORY//$GITHUB_REPOSITORY_OWNER/}
     WS="$RUNNER_WORKSPACE$REPO"
-    INPUT_OPTIONS="$INPUT_OPTIONS -v $WS:$WS -w $WS"
+    INPUT_OPTIONS+=("-v $WS:$WS")
+    INPUT_OPTIONS+=("-w $WS")
   fi
 else
-  if [[ -n "$INPUT_MOUNT_WS" && "$INPUT_MOUNT_WS" != "false" ]]; then
+  if [[ ! -z "$INPUT_MOUNT_WS" && "$INPUT_MOUNT_WS" != "false" ]]; then
     WS=$INPUT_MOUNT_WS
-    INPUT_OPTIONS="$INPUT_OPTIONS -v $WS:$WS -w $WS"
+    INPUT_OPTIONS+=("-v $WS:$WS")
+    INPUT_OPTIONS+=("-w $WS")
   fi
 fi
 
-echo "Docker run options: ${INPUT_OPTIONS}"
+echo "Docker run options: ${INPUT_OPTIONS[@]}"
 INPUT_RUN="${INPUT_RUN//$'\n'/;}"
 echo "Running: $INPUT_RUN"
 
@@ -34,7 +42,7 @@ echo "Running: $INPUT_RUN"
 IMAGE_ID=$(
   docker create \
     -v "$INPUT_SOCKET:/var/run/docker.sock" \
-    $INPUT_OPTIONS \
+    $INPUT_OPTIONS[@] \
     --entrypoint="$INPUT_SHELL" \
     "$INPUT_IMAGE" \
     -c "$INPUT_RUN"
