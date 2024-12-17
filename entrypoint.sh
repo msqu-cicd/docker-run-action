@@ -30,9 +30,16 @@ echo "Docker run options: ${INPUT_OPTIONS}"
 INPUT_RUN="${INPUT_RUN//$'\n'/;}"
 echo "Running: $INPUT_RUN"
 
-docker run --rm \
-  -v "$INPUT_SOCKET:/var/run/docker.sock" \
-  $INPUT_OPTIONS \
-  --entrypoint="$INPUT_SHELL" \
-  "$INPUT_IMAGE" \
-  -c "$INPUT_RUN"
+# podman socket workaround, fixed in newer versions: https://github.com/containers/podman/issues/18889
+IMAGE_ID=$(
+  docker create \
+    -v "$INPUT_SOCKET:/var/run/docker.sock" \
+    $INPUT_OPTIONS \
+    --entrypoint="$INPUT_SHELL" \
+    "$INPUT_IMAGE" \
+    -c "$INPUT_RUN"
+)
+docker start $IMAGE_ID
+CODE=$(docker inspect -f {{.State.ExitCode}} $IMAGE_ID)
+docker rm $IMAGE_ID
+exit $CODE
