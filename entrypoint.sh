@@ -39,8 +39,8 @@ IMAGE_ID=$(
     "$INPUT_IMAGE" \
     -c "$INPUT_RUN"
 )
-docker start $IMAGE_ID && docker wait $IMAGE_ID
+docker start $IMAGE_ID
+CODE=$(docker wait $IMAGE_ID)
 docker logs $IMAGE_ID
-CODE=$(docker inspect -f {{.State.ExitCode}} $IMAGE_ID)
 docker rm $IMAGE_ID
 exit $CODE
