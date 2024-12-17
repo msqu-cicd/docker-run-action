@@ -19,18 +19,18 @@ if [[ "$INPUT_MOUNT_WS" = "true" ]]; then
   if [[ ! -z "$JOB_CONTAINER_NAME" ]]; then
     # If JOB_CONTAINER_NAME exists, use --volumes-from (Gitea support)
     INPUT_OPTIONS+=("--volumes-from=$JOB_CONTAINER_NAME")
-    INPUT_OPTIONS+=("-w ${GITHUB_WORKSPACE}")
+    INPUT_OPTIONS+=("-w=${GITHUB_WORKSPACE}")
   else
     REPO=${GITHUB_REPOSITORY//$GITHUB_REPOSITORY_OWNER/}
     WS="$RUNNER_WORKSPACE$REPO"
-    INPUT_OPTIONS+=("-v $WS:$WS")
-    INPUT_OPTIONS+=("-w $WS")
+    INPUT_OPTIONS+=("-v=$WS:$WS")
+    INPUT_OPTIONS+=("-w=$WS")
   fi
 else
   if [[ ! -z "$INPUT_MOUNT_WS" && "$INPUT_MOUNT_WS" != "false" ]]; then
     WS=$INPUT_MOUNT_WS
-    INPUT_OPTIONS+=("-v $WS:$WS")
-    INPUT_OPTIONS+=("-w $WS")
+    INPUT_OPTIONS+=("-v=$WS:$WS")
+    INPUT_OPTIONS+=("-w=$WS")
   fi
 fi
 
@@ -42,7 +42,7 @@ echo "Running: $INPUT_RUN"
 IMAGE_ID=$(
   docker create \
     -v "$INPUT_SOCKET:/var/run/docker.sock" \
-    $INPUT_OPTIONS[@] \
+    ${INPUT_OPTIONS[@]} \
     --entrypoint="$INPUT_SHELL" \
     "$INPUT_IMAGE" \
     -c "$INPUT_RUN"

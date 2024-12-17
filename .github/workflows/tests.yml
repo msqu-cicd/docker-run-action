@@ -40,7 +40,7 @@ jobs:
         id: run-docker
         with:
           image: docker
-          options: -v ${{ github.workspace }}:/work
+          options: -v=${{ github.workspace }}:/work
           run: |
             echo "::set-output name=file-contents::`cat /work/someFile`"
       - name: Check if file contents match
@@ -116,4 +116,4 @@ jobs:
           run: >
             pg_isready -d test -U test -h postgres -p ${{ job.services.postgres.ports[5432] }}
           options: >
-            -e PGPASSWORD=test
+            -e=PGPASSWORD=test
