@@ -5,9 +5,8 @@ on:
     branches:
       - prime
       - develop
-  pull_request:
-    branches:
-      - prime
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   smoke-test:
