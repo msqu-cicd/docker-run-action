@@ -57,8 +57,8 @@ IMAGE_ID=$(
     -c "$INPUT_RUN"
 )
 docker start $IMAGE_ID
+docker logs -f $IMAGE_ID &
 CODE=$(docker wait $IMAGE_ID)
-docker logs $IMAGE_ID
 echo "Complete code: $CODE"
 docker rm $IMAGE_ID
 exit $CODE
