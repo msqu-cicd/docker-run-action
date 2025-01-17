@@ -3,16 +3,16 @@
 - Suitable for use with [Gitea Actions](https://docs.gitea.com/next/usage/actions/overview)
 - Run a specific step in a Docker image.
 - Run an image built by a previous step.
-- See https://github.com/frozen-tapestry/docker-run-action/blob/v6/action.yml for all the available inputs.
+- See https://git.msqu.de/cicd/docker_run_action/src/branch/main/action.yml for all the available inputs.
 
 ## Examples
 
 #### Typical Use Case
 
 ```yaml
-- name: Checkout 
-  uses: actions/checkout@v4 # Required to mount the GitHub Workspace to a volume 
-- uses: frozen-tapestry/docker-run-action@v6
+- name: Checkout
+  uses: actions/checkout@v4 # Required to mount the GitHub Workspace to a volume
+- uses: https://git.msqu.de/cicd/docker_run_action@v6
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -26,7 +26,7 @@
 
 #### Run a Privately-Owned Image
 ```yaml
-- uses: frozen-tapestry/docker-run-action@v6
+- uses: https://git.msqu.de/cicd/docker_run_action@v6
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -41,7 +41,7 @@
   with:
     tags: test-image:latest
     push: false
-- uses: frozen-tapestry/docker-run-action@v6
+- uses: https://git.msqu.de/cicd/docker_run_action@v6
   with:
     image: test-image:latest
     run: echo "hello world"
@@ -50,7 +50,7 @@
 #### Use a Specific Shell (Default: /bin/sh)
 *Note: The shell must be installed in the container.*
 ```yaml
-- uses: frozen-tapestry/docker-run-action@v6
+- uses: https://git.msqu.de/cicd/docker_run_action@v6
   with:
     image: docker:latest
     shell: bash
@@ -61,7 +61,7 @@
 
 #### Mount Workspace with a Custom Directory
 ```yaml
-- uses: frozen-tapestry/docker-run-action@v6
+- uses: https://git.msqu.de/cicd/docker_run_action@v6
   with:
     image: docker:latest
     mount_ws: /custom/path
