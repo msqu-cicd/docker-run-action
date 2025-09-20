@@ -21,7 +21,7 @@ jobs:
           run: |
             echo "docker-version=$(echo $DOCKER_VERSION)" >> $GITHUB_OUTPUT
       - name: Test the output
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const dockerVersion = '${{ steps.run-docker.outputs.docker-version }}';
@@ -43,7 +43,7 @@ jobs:
           run: |
             echo "file-contents=$(cat /work/someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
@@ -65,7 +65,7 @@ jobs:
           run: |
             echo "file-contents=$(cat ./someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
@@ -87,7 +87,7 @@ jobs:
           run: |
             echo "file-contents=$(cat /tmp/someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
