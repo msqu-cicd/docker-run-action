@@ -11,7 +11,7 @@
 
 ```yaml
 - name: Checkout
-  uses: actions/checkout@v4 # Required to mount the GitHub Workspace to a volume
+  uses: https://github.com/actions/checkout@v5
 - uses: https://git.msqu.de/cicd/docker_run_action@v6
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
@@ -37,7 +37,7 @@
 
 #### Run an Image Built by a Previous Step
 ```yaml
-- uses: docker/build-push-action@v4
+- uses: https://github.com/docker/build-push-action@v4
   with:
     tags: test-image:latest
     push: false

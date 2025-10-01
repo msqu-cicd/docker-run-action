@@ -12,7 +12,7 @@ jobs:
   smoke-test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: https://github.com/actions/checkout@v5
       - name: Run docker action and set output for testing
         uses: ./
         id: run-docker
@@ -21,7 +21,7 @@ jobs:
           run: |
             echo "docker-version=$(echo $DOCKER_VERSION)" >> $GITHUB_OUTPUT
       - name: Test the output
-        uses: actions/github-script@v8
+        uses: https://github.com/actions/github-script@v8
         with:
           script: |
             const dockerVersion = '${{ steps.run-docker.outputs.docker-version }}';
@@ -31,7 +31,7 @@ jobs:
   volume-mount-test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: https://github.com/actions/checkout@v5
       - name: Create File to be mounted
         run: echo "some text" > someFile
       - name: Run docker action with mounted workspace
@@ -43,7 +43,7 @@ jobs:
           run: |
             echo "file-contents=$(cat /work/someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
-        uses: actions/github-script@v8
+        uses: https://github.com/actions/github-script@v8
         with:
           script: |
             const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
@@ -53,7 +53,7 @@ jobs:
   ws-mount-test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: https://github.com/actions/checkout@v5
       - name: Create File to be mounted
         run: echo "some text" > someFile
       - name: Run docker action with mounted workspace
@@ -65,7 +65,7 @@ jobs:
           run: |
             echo "file-contents=$(cat ./someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
-        uses: actions/github-script@v8
+        uses: https://github.com/actions/github-script@v8
         with:
           script: |
             const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
@@ -75,7 +75,7 @@ jobs:
   tmp-mount-test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: https://github.com/actions/checkout@v5
       - name: Create File to be mounted
         run: echo "some text" > /tmp/someFile
       - name: Run docker action with mounted workspace
@@ -87,7 +87,7 @@ jobs:
           run: |
             echo "file-contents=$(cat /tmp/someFile)" >> $GITHUB_OUTPUT
       - name: Check if file contents match
-        uses: actions/github-script@v8
+        uses: https://github.com/actions/github-script@v8
         with:
           script: |
             const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
@@ -107,7 +107,7 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: https://github.com/actions/checkout@v5
       - name: Run docker action and test network connection
         uses: ./
         with:
