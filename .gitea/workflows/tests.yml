@@ -1,0 +1,104 @@
+name: Docker Run Action Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v7
+      - name: Run a command in a container
+        uses: ./
+        with:
+          image: alpine:latest
+          run: echo "hello world"
+
+  options-splitting-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v7
+      - name: Pass space-separated options
+        uses: ./
+        with:
+          image: alpine:latest
+          options: -e ABC=123 -e DEF=xyz --label docker-run-action-test=1
+          run: |
+            [ "$ABC" = "123" ]
+            [ "$DEF" = "xyz" ]
+
+  multiline-run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v7
+      - name: Run a multi-line script with blank lines and a loop
+        uses: ./
+        with:
+          image: alpine:latest
+          run: |
+            set -e
+            echo "first line"
+
+            for i in 1 2; do
+              echo "loop $i"
+            done
+            echo "last line"
+
+  ws-mount-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v7
+      - name: Create file to be mounted
+        run: echo "some text" > someFile
+      - name: Read the file from the mounted workspace
+        uses: ./
+        with:
+          image: alpine:latest
+          mount_ws: true
+          run: grep -q "some text" ./someFile
+
+  output-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v7
+      - name: Write a step output from the container
+        uses: ./
+        id: run-docker
+        with:
+          image: alpine:latest
+          mount_ws: true
+          run: echo "result=ok" >> "$GITHUB_OUTPUT"
+      - name: Check the output
+        run: |
+          [ "${{ steps.run-docker.outputs.result }}" = "ok" ]
+
+  exit-code-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v7
+      - name: Run a failing command
+        uses: ./
+        id: failing
+        continue-on-error: true
+        with:
+          image: alpine:latest
+          run: exit 7
+      - name: Check that the step failed
+        run: |
+          [ "${{ steps.failing.outcome }}" = "failure" ]
+
+  no-socket-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v7
+      - name: Run without the docker socket mounted
+        uses: ./
+        with:
+          image: alpine:latest
+          socket: ''
+          run: |
+            [ ! -e /var/run/docker.sock ]
