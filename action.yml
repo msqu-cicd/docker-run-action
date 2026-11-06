@@ -35,7 +35,7 @@ inputs:
     required: false
     default: 'false'
   socket:
-    description: 'Docker socket path'
+    description: 'Docker socket path mounted into the container. Set to an empty string to not mount the socket.'
     required: false
     default: '/var/run/docker.sock'
 runs:
